@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f8f8f8;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.button-group {
+    line-height: 2em;
+}
+
+.top-section {
+    background-color: #505050; 
+    color: white; 
+    padding: 10px; 
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box; 
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background: #f4f4f4;
+    color: #333;
+
+}
+
+
+.button-group button {
+    margin-top: 20px;
+    margin-left: 5px;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #333;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    vertical-align: middle; /* Aligns buttons with text */
+}
+
+.button-group button:hover {
+    background-color: #555;
+}
+
+.text-aligned-with-button {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
