@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Database</title>
+    <link rel="stylesheet" type="text/css" href="./myStyle.css">
+    <div class="top-section">
+    <div class="button-group">
+    <button type="button" onclick="location.href='add.php'">Add</button>
+    <button type="button" onclick="location.href='delete.php'">Remove</button>
+    </div>
+    </div>
+    <div class="container">
+    <h1>Below is our selection</h1>
+    <script>
+        function displayData(data, page, pageSize) {
+            const start = (page - 1) * pageSize;
+            const end = start + pageSize;
+            const paginatedData = data.slice(start, end);
+
+            const container = document.getElementById('data-container');
+            container.innerHTML = ''; 
+
+            const table = document.createElement('table');
+            table.border = '1';
+            const headerRow = table.insertRow();
+            const headers = ['Authors', 'Title'];
+            headers.forEach(headerText => {
+                let headerCell = document.createElement('th');
+                headerCell.appendChild(document.createTextNode(headerText));
+                headerRow.appendChild(headerCell);
+            });
+
+            paginatedData.forEach(row => {
+                let tr = table.insertRow();
+                let td1 = tr.insertCell();
+                td1.appendChild(document.createTextNode(row.authors));
+                let td2 = tr.insertCell();
+                td2.appendChild(document.createTextNode(row.title));
+            });
+
+            container.appendChild(table);
+        }
+
+	function getCurrentPage() {
+    		const urlParams = new URLSearchParams(window.location.search);
+    		let currentPage;
+    		if (urlParams.has('page')) {
+        		currentPage = parseInt(urlParams.get('page'), 10);
+    		} else {
+        		currentPage = 1;
+    		}
+    		return currentPage;
+	}
+
+
+	 function fetchData(page = getCurrentPage(), pageSize = 20) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'fetchData.php?page=' + page, true);
+            xhr.onload = function() {
+                if (this.status === 200) {
+                    const data = JSON.parse(this.responseText);
+                    displayData(data, page, pageSize);
+
+                    const totalPages = Math.ceil(data.length / pageSize);
+                    const paginationContainer = document.getElementById('pagination');
+                    paginationContainer.innerHTML = '';
+
+                    const startPage = Math.max(1, page - 2);
+                    const endPage = Math.min(totalPages, page + 2);
+
+                    for (let i = startPage; i <= endPage; i++) {
+                        paginationContainer.innerHTML += `<button onclick="fetchData(${i}, ${pageSize})">${i}</button> `;
+                    }
+                } else {
+                    console.error('Error:', this.status, this.statusText);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Request Error...');
+            };
+            xhr.send();
+        }
+
+        window.onload = () => fetchData();
+    </script>
+</head>
+<body>
+    <div id="data-container"></div>
+    <div id="pagination"></div>
+</div>
+</body>
+</html>
+
