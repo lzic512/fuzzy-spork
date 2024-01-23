@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Database</title>
+    <link rel="stylesheet" type="text/css" href="./myStyle.css">
+</head>
+<body>
+    <div class="top-section">
+        <div class="button-group">
+            <button type="button" onclick="location.href='add.php'">Add</button>
+            <button type="button" onclick="location.href='delete.php'">Remove</button>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Below is our selection</h1>
+        <div id="data-container"></div>
+        <div id="pagination"></div>
+    </div>
+    <script>
+        let allData = [];
+        const pageSize = 20;
+
+        function displayData(page) {
+            const start = (page - 1) * pageSize;
+            const end = start + pageSize;
+            const paginatedData = allData.slice(start, end);
+
+            const container = document.getElementById('data-container');
+            container.innerHTML = '';
+
+            const table = document.createElement('table');
+            table.border = '1';
+            const headerRow = table.insertRow();
+            const headers = ['Authors', 'Title'];
+            headers.forEach(headerText => {
+                let headerCell = document.createElement('th');
+                headerCell.appendChild(document.createTextNode(headerText));
+                headerRow.appendChild(headerCell);
+            });
+
+            paginatedData.forEach(row => {
+                let tr = table.insertRow();
+                let td1 = tr.insertCell();
+                td1.appendChild(document.createTextNode(row.authors));
+                let td2 = tr.insertCell();
+                td2.appendChild(document.createTextNode(row.title));
+            });
+
+            container.appendChild(table);
+            setupPagination(page, Math.ceil(allData.length / pageSize));
+        }
+
+        function setupPagination(currentPage, totalPages) {
+            const paginationContainer = document.getElementById('pagination');
+            paginationContainer.innerHTML = '';
+
+            for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+                const pageButton = createPaginationButton(i, i);
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+
+        function createPaginationButton(page, text) {
+            const button = document.createElement('button');
+            button.innerText = text;
+            button.onclick = () => {
+                displayData(page);
+                setupPagination(page, Math.ceil(allData.length / pageSize));
+            };
+            return button;
+        }
+
+        function fetchData() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'fetchData.php', true);
+            xhr.onload = function() {
+                if (this.status === 200) {
+                    allData = JSON.parse(this.responseText);
+                    displayData(1);
+                } else {
+                    console.error('Error:', this.status, this.statusText);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Request Error...');
+            };
+            xhr.send();
+        }
+
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
+

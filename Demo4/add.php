@@ -42,7 +42,7 @@ $conn->close();
 <div class="top-section">
 <div class="button-group">
     <button type="button" onclick="location.href='form.html'">Back To Form</button>
-    <button type="button" onclick="location.href='showingData.php'">Back To Selection</button>
+    <button type="button" onclick="location.href='showingData.html'">Back To Selection</button>
 </div>
 </div>
 <div class="container">
